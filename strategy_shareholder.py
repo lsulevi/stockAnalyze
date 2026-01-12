@@ -85,6 +85,8 @@ def analyze_shareholder_return(df_annual,res_growth ,res_profit,logger=None):
     avg_4q_opm = res_profit['avg_4q_opm']
     latest_opm = res_profit['latest_opm']
     next_growth = res_growth['推估下一年度成長率']
+    print(next_growth)
+    print(new_eps)
     if latest_opm > avg_4q_opm : add_score = 1.05
     else: add_score = 0.95
     next_eps = new_eps * ( 1 + next_growth) * add_score

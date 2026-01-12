@@ -126,7 +126,7 @@ def analyze_growth_stage(df, logger=None):
     elif gold_ratio > 0.5: gold_txt = "60 (📈 標準成長)"
     elif gold_ratio > 0: gold_txt = "40 🎢 (虛浮成長)"
     elif row['Mon_YoY'] >= 0.2: gold_txt = "60 🛡️ (強勢整理 (高成長))"
-    else: gold_txt = "40 ❌ (動能渙散)",
+    else: gold_txt = "40 ❌ (動能渙散)"
 
   
 
@@ -163,6 +163,12 @@ def analyze_growth_stage(df, logger=None):
     #推估下一年度成長率
     next_growth = ((row['Cum_YoY'] * 0.4) + (row['3M_Avg'] * 0.4) + (trend * 0.2))*1.1
 
+    if next_growth > 0.50:
+        projected_growth = 0.30 + (next_growth - 0.50) * 0.1
+
+    else:
+        projected_growth = next_growth
+
     if logger: logger(f" ({row['stock_id']}) 推估下一年度成長率: {round(next_growth * 100, 2)}")
     if logger: logger(f"======== 結束分析 ({row['stock_id']}) 成長資料 ========")
 
@@ -188,5 +194,5 @@ def analyze_growth_stage(df, logger=None):
         "穩定分": stable_score,
         "成長總分": total_score,
         "成長總分建議": action,
-        "推估下一年度成長率": next_growth,
+        "推估下一年度成長率": projected_growth,
     }

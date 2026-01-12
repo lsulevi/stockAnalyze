@@ -90,36 +90,30 @@ def call_gemini_api(stock_res, api_key):
         Est_Next_Year_EPS: {stock_res['推估eps']}
 
         Valuation_Levels:
-        Cheap_Price (便宜價): {stock_res['便宜價']}
-        Fair_Price (合理價): {stock_res['合理價']}
-        Expensive_Price (昂貴價): {stock_res['昂貴價']}
-        Target_Price_Net_Value (淨值目標價): {stock_res['目標價']}
+        Cheap_Price (便宜價 = (最低本益比) * 推估明年EPS): {stock_res['便宜價']}
+        Fair_Price (合理價 = (平均本益比) * 推估明年EPS): {stock_res['合理價']}
+        Expensive_Price (昂貴價 = (最高本益比) * 推估明年EPS): {stock_res['昂貴價']}
+        Target_Price_Net_Value (淨值目標價 = 淨值 × (1 + (最新ROE - 美債10年殖利率)) ^ 10年): {stock_res['目標價']}
 
-        # 預先計算的估值狀態 (請參考下方 Python/Excel 邏輯計算後填入)
+        # 預先計算的估值狀態
         Valuation_Status: "{stock_res['價值評估']}"
-        # 範例: "🟢 低估 (安全邊際足)" 或 "🔴 過熱 (透支未來)"
 
         ---
         ## [給 AI 的指令 Instruction]
         你是一位資深台股分析師，請根據【{stock_res['股票']}】上述數據撰寫【個股診斷報告】。    
-
         **分析邏輯準則：**
         1. **[總調定性]**：優先引用 `Master_Evaluation`。
-        - 如果是「實質獲利爆發」，請強調這是像鴻海、台積電這類有基本面支撐的權值/成長股。
 
         2. **[拆解動能]**：
         - 觀察 `Trend_Diagnosis` 與 `Short_Term_Momentum`。
-        - 若出現「🔥 低檔轉強」，請強調是佈局良機。
-        - 若出現「⚠️ 爆發過熱」，請提醒乖離風險。
 
         3. **[檢視獲利品質] (最重要)**：
         - 引用 `Quality_Matrix`。若是「虛胖成長」，語氣需嚴厲警示。
-        - 若 `Is_8Q_High` 為 True，請大書特書，強調公司產品組合優化或議價能力提升。
 
         4. **[操作建議] (Actionable Advice)**：
-        - 根據 `Current_Price` 與 `Cheap/Fair/Expensive` 的距離，給出具體價位建議。
+        - 根據 `Current_Price` 與 `Cheap/Fair/Expensive/Target_Price_Net_Value` 的距離，給出具體價位建議。
 
-        請用專業、客觀但犀利的口吻輸出，字數控制在 300 字以內。
+        請用專業、客觀但犀利的口吻輸出，字數控制在 500 字以內。
     """
     
     payload = {
@@ -170,6 +164,7 @@ with st.sidebar:
         st.write("1. 適合的產業為「獲利與營收高度正相關」")
         st.write("如電子代工與零組件、半導體產業、軟體與 SaaS 服務")
         st.write("2. 不適用：景氣循環股、金融、營建")
+        st.write("⚠️ 注意：單次分析限制最多 5 檔股票。")
 
     st.divider()
     st.write("🎵 **戰情室 BGM**")
@@ -178,6 +173,11 @@ with st.sidebar:
 
 if start_btn:
     stock_list = [s.strip() for s in stock_input.split(',')]
+
+    if len(stock_list) > 5:
+        st.error(f"❌ 偵測到 {len(stock_list)} 檔股票。為維護系統穩定，單次分析上限為 5 檔，請減少數量後再重試。")
+        st.stop()
+    
     results = []
     st.session_state['process_logs'] = [] 
 
@@ -272,15 +272,15 @@ if st.session_state['analysis_results']:
     
 
     # 計算公式：(目標價 / 目前股價 - 1) * 100
-    df_res['潛在空間'] = ((df_res['目標價'] / df_res['目前股價'] - 1) * 100).map(lambda x: f"{x:+.1f}%")
+    df_res['真正價值潛在空間'] = ((df_res['目標價'] / df_res['目前股價'] - 1) * 100).map(lambda x: f"{x:+.1f}%")
 
     st.subheader("🏆 綜合評分排行榜")
-    cols = ['股票','MasterScore', '目前股價', '目標價', '潛在空間','最終總評']
-    rename_map = {'MasterScore': '綜合評分','最終總評': '分析評語'}
+    cols = ['股票','MasterScore', '目前股價', '目標價', '保底潛在空間','便宜價','合理價','昂貴價','最終總評']
+    rename_map = {'MasterScore': '綜合評分','最終總評': '分析評語','目標價': '實力保底價'}
     existing_cols = [c for c in cols if c in df_res.columns]
     
     st.dataframe(
-        df_res[existing_cols].rename(columns=rename_map).set_index('股票').sort_values('目標價', ascending=False), 
+        df_res[existing_cols].rename(columns=rename_map).set_index('股票').sort_values('實力保底價', ascending=False), 
         use_container_width=True, height=250
     )
 
@@ -376,7 +376,7 @@ if st.session_state['analysis_results']:
 
             with tab_val:
                 eps_next = round(res.get('推估eps'), 2)
-                st.subheader(f"本益比估值法 (推估明年 EPS: {eps_next})")
+                st.subheader(f"本益比估值法 (推估明年 EPS: {eps_next}) ex.市場的期待值")
                 curr_p = res.get('目前股價', 0)
 
                 def get_price_card_html(title, price, diff, theme):
@@ -440,7 +440,7 @@ if st.session_state['analysis_results']:
                 
                 with col_long:
                     with st.container(border=True):
-                        st.write("🔍 **長期內在價值推估**")
+                        st.write("🔍 **長期內在價值推估 ex.公司的真實潛力價**")
                         iv = res.get('目標價', 0)
                         st.title(f"${iv}")
                         st.caption(f"模型：淨值 × (1 + (ROE - 美債 {res.get('美債殖利率')}%)) ^ 10年")

@@ -51,7 +51,8 @@ def analyze_valuation_stage(df_val, current_price, us_bond,eps,df_annual, logger
     # 根據當前股價與當前 PE 反推目前的 TTM EPS
     # 公式：EPS = Price / PE
     derived_eps = price_val / current_pe if current_pe > 0 else 0
-    
+    print(valuation_eps)
+
     # 便宜價 = (平均 PE - 1倍標準差) * EPS
     target_cheap = round(cheap_pe * valuation_eps, 2)
     # 合理價 = 平均 PE * EPS
@@ -61,6 +62,8 @@ def analyze_valuation_stage(df_val, current_price, us_bond,eps,df_annual, logger
 
     #伯彥估值法
     latest_roe = df_annual['ROE'].iloc[-1]
+    max_sustainable_roe = 0.25
+    latest_roe = min(latest_roe, max_sustainable_roe)
     us_bond = us_bond / 100
     intrinsic_value = round(nav * (1+ (latest_roe - us_bond))** 10, 2)
     
@@ -76,6 +79,9 @@ def analyze_valuation_stage(df_val, current_price, us_bond,eps,df_annual, logger
         logger(f"    [Valuation] 已完成 95% 縮尾處理，排除極端值干擾")
         logger(f"    [Valuation] 便宜價推估: {target_cheap}, 合理價推估: {target_fair}, 昂貴價推估: {target_expensive}")
 
+    print(pe_max)
+    print(pe_min)
+    print(pe_avg)
 
     return {
         "目前股價": price_val,

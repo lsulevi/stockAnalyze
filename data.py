@@ -22,8 +22,15 @@ class StockData:
                 "name": name,
                 "industry": industry,
             }
-        except:
-            return "未知股票"
+        except Exception as e:
+            # 使用 Exception as e 來捕捉原始錯誤訊息
+            # 我們將錯誤訊息放在 name 欄位，方便 UI 顯示
+            error_msg = f"API連線異常: {str(e)}"
+            print(str(e))
+            return {
+                "name": error_msg, 
+                "industry": "系統錯誤"
+            }
 
     def get_revenue(self, stock_id, start_date="2023-01-01"):
 
