@@ -2,5 +2,6 @@ streamlit
 pandas
 numpy
 requests
-FinMind
+finmind
 xlsxwriter
+tqdm
