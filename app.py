@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 import requests
+import json 
 from datetime import datetime
 from data import StockData
 from strategy_growth import analyze_growth_stage
@@ -32,6 +33,29 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+@st.cache_data
+def load_stock_map():
+    try:
+        with open('stock_map.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError:
+        return {}
+
+stock_map = load_stock_map()
+
+@st.dialog("⚠️ 股票篩選警示")
+def show_alert_dialog(stock_id, msg, is_fatal=False):
+    st.write(f"**偵測到股票代號：{stock_id}**")
+    if is_fatal:
+        st.error(msg)
+        st.caption("系統將自動跳過此標的，不進行分析。")
+    else:
+        st.warning(msg)
+        st.caption("系統將繼續嘗試分析，但結果僅供參考。")
+
 
 def call_gemini_api(stock_res, api_key):
     if not api_key:
@@ -190,6 +214,35 @@ if start_btn:
         for i, stock_id in enumerate(stock_list):
             st.write(f"#### 🔍 處理個股：{stock_id}")
             add_log(f"🔍 處理個股：{stock_id}")
+
+            stock_whitelist_info = stock_map.get(stock_id)
+
+            if stock_whitelist_info:
+                # 代號存在於 JSON 中
+                stock_name = stock_whitelist_info.get("name", "未知股票")
+                industry = stock_whitelist_info.get("industry", "未知產業")
+                recommend = stock_whitelist_info.get("recommend", True)
+                note = stock_whitelist_info.get("note", "")
+                
+                if not recommend:
+                    warn_msg = f"此股票屬於【{industry}】，非「獲利與營收高度正相關」產業，不適用本模型。\n({note})"
+                    show_alert_dialog(stock_id, warn_msg, is_fatal=True)
+                    
+                    add_log(f"⚠️ {stock_id} 跳過：{warn_msg}")
+                    st.warning(warn_msg)
+                    st.divider()
+                    continue 
+            else:
+                warn_msg = "此股票未列入台股前 150 大權值股清單，基本面數據可能較不完整或波動較大。"
+                show_alert_dialog(stock_id, warn_msg, is_fatal=False)
+                
+                stock_info = data_loader.get_stock_info(stock_id)
+                if isinstance(stock_info, dict):
+                    stock_name = stock_info.get("name", "未知股票")
+                    industry = stock_info.get("industry", "未知產業")
+                else:
+                    stock_name = str(stock_info)
+                    industry = "未知產業"          
 
             try:
                 add_log(f"📡 正在獲取 {stock_id} 原始數據...")

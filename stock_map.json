@@ -1,0 +1,194 @@
+{
+    "2330": {
+        "name": "台積電",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "2317": {
+        "name": "鴻海",
+        "industry": "其他電子業",
+        "recommend": true,
+        "note": ""
+    },
+    "2454": {
+        "name": "聯發科",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "2308": {
+        "name": "台達電",
+        "industry": "電子零組件業",
+        "recommend": true,
+        "note": ""
+    },
+    "2382": {
+        "name": "廣達",
+        "industry": "電腦及週邊設備業",
+        "recommend": true,
+        "note": ""
+    },
+    "2303": {
+        "name": "聯電",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "3711": {
+        "name": "日月光投控",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "3034": {
+        "name": "聯詠",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "2357": {
+        "name": "華碩",
+        "industry": "電腦及週邊設備業",
+        "recommend": true,
+        "note": ""
+    },
+    "3231": {
+        "name": "緯創",
+        "industry": "電腦及週邊設備業",
+        "recommend": true,
+        "note": ""
+    },
+    "2379": {
+        "name": "瑞昱",
+        "industry": "半導體業",
+        "recommend": true,
+        "note": ""
+    },
+    "3008": {
+        "name": "大立光",
+        "industry": "光電業",
+        "recommend": true,
+        "note": ""
+    },
+    "2345": {
+        "name": "智邦",
+        "industry": "通訊網路業",
+        "recommend": true,
+        "note": ""
+    },
+    "2395": {
+        "name": "研華",
+        "industry": "電腦及週邊設備業",
+        "recommend": true,
+        "note": ""
+    },
+    "6669": {
+        "name": "緯穎",
+        "industry": "電腦及週邊設備業",
+        "recommend": true,
+        "note": ""
+    },
+    "2412": {
+        "name": "中華電",
+        "industry": "通信網路業",
+        "recommend": false,
+        "note": "⚠️ 電信業獲利結構穩定，較不適用高成長動能模型"
+    },
+    "2881": {
+        "name": "富邦金",
+        "industry": "金融保險業",
+        "recommend": false,
+        "note": "⚠️ 金融業無傳統毛利率與營業利益率，不適用本模型"
+    },
+    "2882": {
+        "name": "國泰金",
+        "industry": "金融保險業",
+        "recommend": false,
+        "note": "⚠️ 金融業無傳統毛利率與營業利益率，不適用本模型"
+    },
+    "2891": {
+        "name": "中信金",
+        "industry": "金融保險業",
+        "recommend": false,
+        "note": "⚠️ 金融業無傳統毛利率與營業利益率，不適用本模型"
+    },
+    "2886": {
+        "name": "兆豐金",
+        "industry": "金融保險業",
+        "recommend": false,
+        "note": "⚠️ 金融業無傳統毛利率與營業利益率，不適用本模型"
+    },
+    "2884": {
+        "name": "玉山金",
+        "industry": "金融保險業",
+        "recommend": false,
+        "note": "⚠️ 金融業無傳統毛利率與營業利益率，不適用本模型"
+    },
+    "1101": {
+        "name": "台泥",
+        "industry": "水泥工業",
+        "recommend": false,
+        "note": "⚠️ 景氣循環股受報價影響大，本益比評估需謹慎"
+    },
+    "2002": {
+        "name": "中鋼",
+        "industry": "鋼鐵工業",
+        "recommend": false,
+        "note": "⚠️ 景氣循環股受報價影響大，本益比評估需謹慎"
+    },
+    "2603": {
+        "name": "長榮",
+        "industry": "航運業",
+        "recommend": false,
+        "note": "⚠️ 航運股獲利波動劇烈，本益比極低時常為股價高點"
+    },
+    "2609": {
+        "name": "陽明",
+        "industry": "航運業",
+        "recommend": false,
+        "note": "⚠️ 航運股獲利波動劇烈，本益比極低時常為股價高點"
+    },
+    "2615": {
+        "name": "萬海",
+        "industry": "航運業",
+        "recommend": false,
+        "note": "⚠️ 航運股獲利波動劇烈，本益比極低時常為股價高點"
+    },
+    "2912": {
+        "name": "統一超",
+        "industry": "貿易百貨",
+        "recommend": false,
+        "note": "⚠️ 內需通路股成長性較緩，適合防禦型配置"
+    },
+    "1216": {
+        "name": "統一",
+        "industry": "食品工業",
+        "recommend": false,
+        "note": "⚠️ 食品股屬防禦型標的，成長動能較不明顯"
+    },
+    "6505": {
+        "name": "台塑化",
+        "industry": "油電燃氣業",
+        "recommend": false,
+        "note": "⚠️ 受原油價格波動影響巨大"
+    },
+    "1301": {
+        "name": "台塑",
+        "industry": "塑膠工業",
+        "recommend": false,
+        "note": "⚠️ 傳統產業受景氣循環影響大"
+    },
+    "1303": {
+        "name": "南亞",
+        "industry": "塑膠工業",
+        "recommend": false,
+        "note": "⚠️ 傳統產業受景氣循環影響大"
+    },
+    "1326": {
+        "name": "台化",
+        "industry": "塑膠工業",
+        "recommend": false,
+        "note": "⚠️ 傳統產業受景氣循環影響大"
+    }
+}
