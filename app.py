@@ -223,8 +223,17 @@ with st.sidebar:
 
     st.divider()
     st.write("🎵 **戰情室 BGM**")
-    audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-    st.audio(audio_url, start_time=0)
+    bgm_playlist = {
+        "いつもそばで支えてくれた君に": "いつもそばで支えてくれた君に.mp4",
+        "星空に手が届く丘": "星空に手が届く丘.mp3",
+        "風の強い日を選んで": "風の強い日を選んで.mp3"
+    }
+    
+    # 下拉選單選擇音樂
+    selected_bgm = st.selectbox("選擇背景音樂", list(bgm_playlist.keys()), label_visibility="collapsed")
+    
+    # 播放音樂 (loop=True 代表單曲循環)
+    st.audio(bgm_playlist[selected_bgm], start_time=0, loop=True)
 
 if start_btn:
     stock_list = [s.strip() for s in stock_input.split(',')]
